@@ -1,5 +1,4 @@
 module.exports = function (sequelize, DataTypes) {
-    var Item = require('./login.js');
     var User = sequelize.define('User', {
         firstname: DataTypes.STRING,
         middlename: DataTypes.STRING,
