@@ -4,6 +4,10 @@ module.exports = function (sequelize, DataTypes) {
         username: DataTypes.STRING,
         passwordhash: DataTypes.STRING,
         activeuser: DataTypes.BOOLEAN       
-    });
+    },
+    {
+        freezeTableName: true
+    }
+);
     return Login;
 }

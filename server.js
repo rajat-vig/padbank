@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var db = require('./models');
 var LoginController = require('./app/controllers/LoginController.js');
+var UserController = require('./app/controllers/UserController.js');
 var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
@@ -15,6 +16,8 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
 app.use(express.static("app/public"));
 
 LoginController(app, db);
+UserController(app, db);
+
 
 db.sequelize.sync().then(function () {
     app.listen(PORT, function() {
