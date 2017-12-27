@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
     // CRUD
     
-    app.get('/api/branch/:id', function (req, res) {
+    app.get('/api/branch/detail/:id', function (req, res) {
         db.Branch.findById(req.params.id).then(function (result) {
             res.json(result);
         });

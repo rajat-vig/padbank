@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
     // CRUD
     
-    app.get('/api/login/:id', function (req, res) {
+    app.get('/api/login/detail/:id', function (req, res) {
         db.Login.findById(req.params.id).then(function (result) {
             res.json(result);
         });
