@@ -1,7 +1,7 @@
 module.exports = function (app, db) {
     // CRUD
     
-    app.get('/api/inventory/:id', function (req, res) {
+    app.get('/api/inventory/detail/:id', function (req, res) {
         db.Inventory.findById(req.params.id).then(function (result) {
             res.json(result);
         });
