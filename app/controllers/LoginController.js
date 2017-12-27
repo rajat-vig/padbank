@@ -1,6 +1,12 @@
 module.exports = function (app, db) {
     // CRUD
     
+    app.get('/api/login/:id', function (req, res) {
+        db.Login.findById(req.params.id).then(function (result) {
+            res.json(result);
+        });
+    });
+
     app.get('/api/login/all', function (req, res) {
         db.Login.findAll({}).then(function (result) {
             res.json(result);

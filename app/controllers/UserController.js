@@ -1,5 +1,15 @@
 module.exports = function (app, db) {
     // CRUD
+
+    app.get('/api/user/:id', function (req, res) {
+        db.User.findOne({
+            where: {
+                userid: req.params.id
+            }
+        }).then(function (result) {
+            res.json(result);
+        });
+    });
     
     app.get('/api/user/all', function (req, res) {
         db.User.findAll({}).then(function (result) {
