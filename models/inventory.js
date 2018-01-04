@@ -13,8 +13,9 @@ module.exports = function (sequelize, DataTypes) {
 );
 
     Inventory.associate = (models) => {
-        Inventory.belongsTo(models.Login, {foreignKey: 'userid'});
-        Inventory.belongsTo(models.Branch, {foreignKey: 'branchid'});
+        Inventory.belongsTo(models.Login, {foreignKey: 'userid', allowNull: false});
+        Inventory.belongsTo(models.Branch, {foreignKey: 'branchid', allowNull: false});
+        Inventory.hasOne(models.Transactions, {foreignKey: 'userid', allowNull: false});
     }
 
     return Inventory;

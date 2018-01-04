@@ -3,20 +3,8 @@ var response = require('../../response');
 module.exports = function (app, db) {
 
 
-    app.get('/api/login/logindetail/:id', function (req, res) {
-        db.Login.findAll({
-            where: {
-                userid: req.params.id
-            },
-            include: [{model: db.Transactions}]
-        }).then(function (result) {
-            res.json(response.createResponseObject(result));
-        });
-    });
-
-
-    app.get('/api/login/detail/:id', function(req, res) {
-        db.Login.findById(req.params.id).then(function(result) {
+    app.get('/api/permissions/detail/:id', function(req, res) {
+        db.Permissions.findById(req.params.id).then(function(result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.NO_ID_EXIST, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.USER_FOUND, result));
@@ -24,19 +12,17 @@ module.exports = function (app, db) {
         });
 
 
-    app.get('/api/login/all', function (req, res) {
-        db.Login.findAll({}).then(function (result) {
+    app.get('/api/permissions/all', function (req, res) {
+        db.Permissions.findAll({}).then(function (result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.NO_USER, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.USERS_FOUND, result));
         });
     });
     
-    app.post('/api/login/new', function (req, res) {
-        db.Login.create({
-            username: req.body.username,
-            passwordhash: req.body.passwordhash,
-            activeuser: req.body.activeuser
+    app.post('/api/permissions/new', function (req, res) {
+        db.Permissions.create({
+            permissiondescription: req.body.permissiondescription
         }).then(function (result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.BLANK_FIELDS, result)); 
@@ -44,15 +30,13 @@ module.exports = function (app, db) {
         });
     });
     
-    app.put('/api/login/update/:id', function (req, res) {
-        db.Login.update({
-            username: req.body.username,
-            passwordhash: req.body.passwordhash,
-            activeuser: req.body.activeuser
+    app.put('/api/permissions/update/:id', function (req, res) {
+        db.Permissions.update({
+            permissiondescription: req.body.permissiondescription
         }, 
         {
             where: {
-                userid: req.params.id
+                permissionid: req.params.id
             }
         }).then(function (result){
             if (result==0) 
@@ -61,10 +45,10 @@ module.exports = function (app, db) {
         });
     });
     
-    app.delete('/api/login/delete/:id', function (req, res) {
-        db.Login.destroy({
+    app.delete('/api/permissions/delete/:id', function (req, res) {
+        db.Permissions.destroy({
             where: {
-                userid: req.params.id
+                permissionid: req.params.id
             }        
         }).then(function (result){
             if (result==0) 

@@ -4,7 +4,7 @@ var fs        = require('fs');
 var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(__filename);
-var env       = process.env.NODE_ENV || 'production';
+var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.json')[env];
 var db = {};
 var tedious = require("tedious");
@@ -13,22 +13,33 @@ var tedious = require("tedious");
 if (config.use_env_variable) {
     
   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-    console.log("Env: " + env);
-    console.log("Env: " + config.user);
-    var sequelize = new Sequelize('pd-bankDB', 'DbServerAdmin', 'Delhi@0063', {
-        host: 'pd-bankdb.database.windows.net',
-        dialect: 'mssql',
-        pool: {
-            max: 5,
-            min: 0,
-            idle: 10000
-        },
-        "dialectOptions": {
-            "encrypt": true
-        }
-    });
 }
+
+// UNCOMMENT FOR DEVELOPMENT
+
+else {
+    var sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+
+// UNCOMMENT FOR PRODUCTION
+
+// else {
+//     console.log("Env: " + env);
+//     console.log("Env: " + config.user);
+//     var sequelize = new Sequelize('pd-bankDB', 'DbServerAdmin', 'Delhi@0063', {
+//         host: 'pd-bankdb.database.windows.net',
+//         dialect: 'mssql',
+//         pool: {
+//             max: 5,
+//             min: 0,
+//             idle: 10000
+//         },
+//         "dialectOptions": {
+//             "encrypt": true
+//         }
+//     });
+// }
 
 
 

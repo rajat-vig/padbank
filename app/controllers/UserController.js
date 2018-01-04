@@ -1,5 +1,19 @@
+var constants = require('../../constants');
+var response = require('../../response');
 module.exports = function (app, db) {
     // CRUD
+
+
+    app.get('/api/user/userdetail/:id', function (req, res) {
+        db.User.findAll({
+            where: {
+                userid: req.params.id
+            },
+            include: [{model: db.Login}]
+        }).then(function (result) {
+            res.json(response.createResponseObject(result));
+        });
+    });
 
     app.get('/api/user/detail/:id', function (req, res) {
         db.User.findOne({
@@ -7,13 +21,17 @@ module.exports = function (app, db) {
                 userid: req.params.id
             }
         }).then(function (result) {
-            res.json(result);
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAIL, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.USER_DETAIL, result));
         });
     });
     
     app.get('/api/user/all', function (req, res) {
         db.User.findAll({}).then(function (result) {
-            res.json(result);
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAILS, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.USERS_DETAILS, result));
         });
     });
     
@@ -37,7 +55,9 @@ module.exports = function (app, db) {
             idvalue: req.body.idvalue,
             userid: req.body.userid
         }).then(function (result) {
-            res.json(result);
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.MISSING_DETAILS, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_ADDED, result));
         });
     });
     
@@ -66,7 +86,9 @@ module.exports = function (app, db) {
                 userid: req.params.id
             }
         }).then(function (result){
-            res.json(result);
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAILS_UPDATE, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_UPDATED, result));
         });
     });
     
@@ -76,7 +98,9 @@ module.exports = function (app, db) {
                 userid: req.params.id
             }        
         }).then(function (result){
-            res.json(result);
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAILS_DELETE, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_DELETED, result));
         });
     })
     

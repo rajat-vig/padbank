@@ -1,43 +1,23 @@
 {
-    "development": {
-        "username": "root",
-        "password": "root",
-        "database": "ngo",
-        "host": "127.0.0.1",
-        "dialect": "mysql"
-    },
+  "development": {
+      "username": "root",
+      "password": "root",
+      "database": "ngo",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+  },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+      "username": "root",
+      "password": null,
+      "database": "database_test",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
   },
   "production": {
-    "user": "DbServerAdmin",
-    "password": "Delhi@0063",
-    "server": "pd-bankdb.database.windows.net",
-    "pool": {
-      "max": 10,
-      "min": 0,
-      "idleTimeoutMillis": 30000
-    },
-    "database": "pd-bankDB",
-    "dialect": "mssql",
-    "options": {
-      "encrypt": true
-    }
-
+      "username": "root",
+      "password": null,
+      "database": "database_production",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
   }
-
-  //"production": {
-  //  "username": "mypadbank.mysql.database.azure.com",
-  //  "password": null,
-  //  "database": "database_production",
-  //  "host": "mypadbank.mysql.database.azure.com",
-  //  "dialect": "mysql",
-  //  "dialectOptions": {
-  //    "encrypt": "true;"
-  //  }
-  //}
 }

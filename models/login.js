@@ -9,5 +9,12 @@ module.exports = function (sequelize, DataTypes) {
         freezeTableName: true
     }
 );
+    Login.associate = (models) => {
+        Login.hasOne(models.User, {foreignKey: 'userid', allowNull: false});
+        Login.hasOne(models.Inventory, {foreignKey: 'userid', allowNull: false});
+        Login.hasOne(models.Account, {foreignKey: 'userid', allowNull: false});
+        Login.hasOne(models.Transactions, {foreignKey: 'userid', allowNull: false});
+        Login.hasOne(models.Callback, {foreignKey: 'userid', allowNull: false});
+    }
     return Login;
 }

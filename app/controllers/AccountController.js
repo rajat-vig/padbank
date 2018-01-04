@@ -2,21 +2,8 @@ var constants = require('../../constants');
 var response = require('../../response');
 module.exports = function (app, db) {
 
-
-    app.get('/api/login/logindetail/:id', function (req, res) {
-        db.Login.findAll({
-            where: {
-                userid: req.params.id
-            },
-            include: [{model: db.Transactions}]
-        }).then(function (result) {
-            res.json(response.createResponseObject(result));
-        });
-    });
-
-
-    app.get('/api/login/detail/:id', function(req, res) {
-        db.Login.findById(req.params.id).then(function(result) {
+    app.get('/api/account/detail/:id', function(req, res) {
+        db.Account.findById(req.params.id).then(function(result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.NO_ID_EXIST, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.USER_FOUND, result));
@@ -24,19 +11,19 @@ module.exports = function (app, db) {
         });
 
 
-    app.get('/api/login/all', function (req, res) {
-        db.Login.findAll({}).then(function (result) {
+    app.get('/api/account/all', function (req, res) {
+        db.Account.findAll({}).then(function (result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.NO_USER, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.USERS_FOUND, result));
         });
     });
     
-    app.post('/api/login/new', function (req, res) {
-        db.Login.create({
-            username: req.body.username,
-            passwordhash: req.body.passwordhash,
-            activeuser: req.body.activeuser
+    app.post('/api/account/new', function (req, res) {
+        db.Account.create({
+            userid: req.body.userid,
+            branchid: req.body.branchid,
+            roleid: req.body.roleid
         }).then(function (result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.BLANK_FIELDS, result)); 
@@ -44,11 +31,11 @@ module.exports = function (app, db) {
         });
     });
     
-    app.put('/api/login/update/:id', function (req, res) {
-        db.Login.update({
-            username: req.body.username,
-            passwordhash: req.body.passwordhash,
-            activeuser: req.body.activeuser
+    app.put('/api/account/update/:id', function (req, res) {
+        db.Account.update({
+            userid: req.body.userid,
+            branchid: req.body.branchid,
+            roleid: req.body.roleid
         }, 
         {
             where: {
@@ -61,8 +48,8 @@ module.exports = function (app, db) {
         });
     });
     
-    app.delete('/api/login/delete/:id', function (req, res) {
-        db.Login.destroy({
+    app.delete('/api/account/delete/:id', function (req, res) {
+        db.Account.destroy({
             where: {
                 userid: req.params.id
             }        

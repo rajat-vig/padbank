@@ -4,14 +4,14 @@ module.exports = function (sequelize, DataTypes) {
         middlename: DataTypes.STRING,
         lastname: DataTypes.STRING,
         email: DataTypes.STRING,
-        mobile: DataTypes.BIGINT,
+        mobile: DataTypes.INTEGER,
         country: DataTypes.STRING,
         state: DataTypes.STRING,
         district: DataTypes.STRING,
         city: DataTypes.STRING,
         village: DataTypes.STRING,
         streetline1: DataTypes.STRING,
-        streetline1: DataTypes.STRING,
+        streetline2: DataTypes.STRING,
         pincode: DataTypes.INTEGER,
         dob: DataTypes.DATEONLY,
         gitype: DataTypes.STRING,
@@ -24,7 +24,7 @@ module.exports = function (sequelize, DataTypes) {
     User.removeAttribute('id');
 
     User.associate = (models) => {
-    User.belongsTo(models.Login, {foreignKey: 'userid'});
+    User.belongsTo(models.Login, {foreignKey: 'userid', allowNull: false});
     }
     return User;
 }

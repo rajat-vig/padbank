@@ -1,0 +1,51 @@
+// Common Constants;
+exports.TRUE = true;
+exports.FALSE = false;
+
+// Login Controller Constants;
+exports.NO_ID_EXIST = "No user exist for this ID";
+exports.USER_FOUND = "User found";
+exports.NO_USER = "No user found";
+exports.USERS_FOUND = "Users found";
+exports.BLANK_FIELDS = "Please enter all the required fields";
+exports.USER_CREATED = "New user created successfully";
+exports.NO_UPDATE = "This field can't be updated";
+exports.USER_UPDATED = "User detail updated successfully";
+exports.NO_DELETE = "This user can't be deleted";
+exports.USER_DELETED = "User Deleted Successfully";
+
+// User Controller Constants;
+exports.NO_DETAIL = "No user details found for this ID";
+exports.USER_DETAIL = "User details found";
+exports.NO_DETAILS = "No user details found";
+exports.USERS_DETAILS = "Users details found";
+exports.MISSING_DETAILS = "Please enter all the required details";
+exports.DETAILS_ADDED = "New user details added successfully";
+exports.NO_DETAILS_UPDATE = "User details can't be updated";
+exports.DETAILS_UPDATED = "User details updated successfully";
+exports.NO_DETAILS_DELETE = "User details can't be deleted";
+exports.DETAILS_DELETED = "User details deleted Successfully";
+
+// Branch Controller Constants;
+exports.NO_BRANCH = "No branch exist for this ID";
+exports.BRANCH_FOUND = "Branch found";
+exports.NO_BRANCHES = "No branch found";
+exports.BRANCHES_FOUND = "Branches found";
+exports.MISSING_BRANCH_DETAILS = "Please enter all the required branch details";
+exports.BRANCH_DETAILS_ADDED = "New branch added successfully";
+exports.BRANCH_NOT_UPDATED = "This branch can't be updated";
+exports.BRANCH_UPDATED = "Branch details updated successfully";
+exports.BRANCH_NOT_DELETED = "This branch can't be deleted";
+exports.BRANCH_DELETED = "Branch deleted successfully";
+
+// Inventory Controller Constants;
+exports.NO_INVENTORY = "No inventory exist for this ID";
+exports.INVENTORY_FOUND = "Inventory found";
+exports.NO_INVENTORIES = "No inventories found";
+exports.INVENTORIES_FOUND = "Inventories found";
+exports.MISSING_INVENTORY_DETAILS = "Please enter all the required inventory details";
+exports.INVENTORY_ADDED = "New inventory added successfully";
+exports.INVENTORY_NOT_UPDATED = "This inventory can't be updated";
+exports.INVENTORY_UPDATED = "Inventory Details updated successfully";
+exports.INVENTORY_NOT_DELETED = "This inventory can't be deleted";
+exports.INVENTORY_DELETED = "Inventory deleted successfully";
