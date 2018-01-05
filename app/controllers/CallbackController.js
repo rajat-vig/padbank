@@ -2,7 +2,8 @@ var constants = require('../../constants');
 var response = require('../../response');
 var utility = require('../../utilities');
 module.exports = function (app, db) {
-    const Op = db.sequelize.Op;
+const Op = db.sequelize.Op;
+const Fn = db.sequelize.fn;
 
     // CRUD
 
@@ -130,5 +131,75 @@ module.exports = function (app, db) {
             });
         });
 
-    
+        app.post('/api/callback/acceptrec', function (req, res) {
+            db.Inventory.findOne({
+                where: {
+                    inventoryid: req.body.inventoryid
+                }
+            }).then(function (result2) {
+                var totalpads = utility.checkIfAmount(result2["amountdonated"], result2["unitdonated"]);
+                db.Account.findAll({
+                    where: {
+                        [Op.or]: [{userid: req.body.secondaryid}, {userid: req.body.userid}]
+                    }
+                }).then(function (result) {
+                    var bid1 = (result[0]["branchid"]);
+                    var bid2 = (result[1]["branchid"]);
+                    var rid1 = (result[0]["roleid"]);
+                    var rid2 = (result[1]["roleid"]);
+                    db.Roles.findAll({
+                        where: {
+                            [Op.or]: [{roleid: rid1}, {roleid: rid2}]
+                        }      
+                    }).then(function (result1){
+                        var ttype1 = (result1[0]["roletype"]+"-OUT");
+                        var ttype2 = (result1[1]["roletype"]+"-IN");
+                        var dt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                        db.Transactions.create({
+                            transactiontype: ttype1,
+                            unitcount: totalpads,
+                            transactiondatetime: dt,
+                            inventoryid: req.body.inventoryid,
+                            userid: req.body.secondaryid,
+                            branchid: bid1
+                            });
+                        db.Transactions.create({
+                            transactiontype: ttype2,
+                            unitcount: totalpads,
+                            transactiondatetime: dt,
+                            inventoryid: req.body.inventoryid,
+                            userid: req.body.userid,
+                            branchid: bid2
+                            })    
+                            .then(function (result3) {
+                                if (result3==0) 
+                                return res.json(response.createResponseObject(constants.FALSE, constants.MISSING_INVENTORY_DETAILS, result3)); 
+                            res.json(response.createResponseObject(constants.TRUE, constants.INVENTORY_ADDED, result3));
+                        });
+                    });
+                    });
+            });
+            
+            });
+
+
+        app.get('/api/callback/home', function (req, res) {
+            db.Inventory.sum('unitdonated').then(function (padscollected) {
+                db.Transactions.sum('unitcount', { where: { transactiontype: "R-IN" }} ).then(function (padsdistributed) {
+                    db.Transactions.count({ where: { transactiontype: "R-IN" }, distinct: true, col: 'userid' } ).then(function (girlsbenefitted) {
+                        db.Branch.count({ distinct: true, col: 'branchid' } ).then(function (branches) {
+                            db.Account.count({ where: { roleid: 2 } , distinct: true, col: 'userid' } ).then(function (volunteers) {
+                                db.Account.count({ where: { roleid: 1 } , distinct: true, col: 'userid' } ).then(function (donors) {
+                                    var result = {padscollected: padscollected, padsdistributed: padsdistributed, girlsbenefitted: girlsbenefitted, branches: branches, volunteers: volunteers, donors: donors};
+                                    if (result==0) 
+                                        return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAIL, result)); 
+                                    res.json(response.createResponseObject(constants.TRUE, constants.USER_DETAIL, result));
+                                });    
+                            });    
+                        });
+                    });                   
+                });            
+            });
+        });
+
 }
