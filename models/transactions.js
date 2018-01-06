@@ -2,7 +2,7 @@ module.exports = function (sequelize, DataTypes) {
     var Transactions = sequelize.define('Transactions', {
         transactionid: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
         transactiontype: DataTypes.STRING,
-        unitcount: DataTypes.STRING,
+        unitcount: DataTypes.INTEGER,
         transactiondatetime: DataTypes.DATEONLY
     },
     {

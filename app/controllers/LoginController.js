@@ -14,6 +14,19 @@ module.exports = function (app, db) {
         });
     });
 
+    app.post('/api/login/user', function (req, res) {
+        db.Login.findOne({
+            where: {
+                username: req.body.username,
+                passwordhash: req.body.passwordhash
+            }
+        }).then(function (result) {
+            if (!result) 
+                return res.json(response.createResponseObject(constants.FALSE, "Invalid Username or Password", result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.USER_FOUND, result));
+        });
+    });    
+
 
     app.get('/api/login/detail/:id', function(req, res) {
         db.Login.findById(req.params.id).then(function(result) {
