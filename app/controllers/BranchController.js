@@ -10,6 +10,31 @@ module.exports = function (app, db) {
         });
     });
 
+
+    app.get('/api/branch/states', function (req, res) {
+        db.Branch.findAll({
+            attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('state')), 'state']]
+        }).then(function (result) {
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_BRANCHES, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.BRANCHES_FOUND, result));
+        });
+    });
+
+    app.post('/api/branch/districts', function (req, res) {
+        db.Branch.findAll({
+//            attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('district')), 'district'], 'branchid'],
+            attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('district')), 'district']],
+            where: {
+                state: req.body.state
+            }
+          }).then(function (result) {
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_BRANCHES, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.BRANCHES_FOUND, result));
+        });
+    });
+
     app.get('/api/branch/all', function (req, res) {
         db.Branch.findAll({}).then(function (result) {
             if (result==0) 
