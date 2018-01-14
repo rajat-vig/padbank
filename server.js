@@ -11,6 +11,7 @@ var RolesController = require('./app/controllers/RolesController.js');
 var AccountController = require('./app/controllers/AccountController.js');
 var TransactionsController = require('./app/controllers/TransactionsController.js');
 var CallbackController = require('./app/controllers/CallbackController.js');
+var ContactController = require('./app/controllers/ContactController.js');
 var PORT = process.env.PORT || 3000;
 var tedious = require("tedious");
 // Sets up the Express app to handle data parsing
@@ -31,6 +32,7 @@ RolesController(app, db);
 AccountController(app, db);
 TransactionsController(app, db);
 CallbackController(app, db);
+ContactController(app, db);
 
 app.get('/', function (req, res) {
 

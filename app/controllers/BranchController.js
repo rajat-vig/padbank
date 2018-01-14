@@ -10,6 +10,17 @@ module.exports = function (app, db) {
         });
     });
 
+    app.get('/api/branch/branchdetail/:id', function (req, res) {
+        db.Branch.findAll({
+            where: {
+                branchid: req.params.id
+            },
+            include: [{model: db.Contact}]
+        }).then(function (result) {
+            res.json(response.createResponseObject(result));
+        });
+    });
+
 
     app.get('/api/branch/states', function (req, res) {
         db.Branch.findAll({
@@ -23,7 +34,7 @@ module.exports = function (app, db) {
 
     app.post('/api/branch/districts', function (req, res) {
         db.Branch.findAll({
-//            attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('district')), 'district'], 'branchid'],
+//          attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('district')), 'district'], 'branchid'],
             attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('district')), 'district']],
             where: {
                 state: req.body.state

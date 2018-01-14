@@ -17,6 +17,7 @@ module.exports = function (sequelize, DataTypes) {
         Branch.hasOne(models.Inventory, {foreignKey: 'branchid', allowNull: false});
         Branch.hasOne(models.Account, {foreignKey: 'branchid', allowNull: false});
         Branch.hasOne(models.Transactions, {foreignKey: 'branchid', allowNull: false});
+        Branch.hasOne(models.Contact, {foreignKey: 'branchid', allowNull: false});
     }
     return Branch;
 }
