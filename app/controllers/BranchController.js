@@ -21,6 +21,16 @@ module.exports = function (app, db) {
         });
     });
 
+    app.post('/api/branch/allbranch', function (req, res) {
+        db.Branch.findAll({
+            attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('name')), 'name']],
+            where: {
+                district: req.body.district
+            }
+        }).then(function (result) {
+                res.json(response.createResponseObject(constants.TRUE, constants.BRANCHES_FOUND, result));
+          });
+    });
 
     app.get('/api/branch/states', function (req, res) {
         db.Branch.findAll({
