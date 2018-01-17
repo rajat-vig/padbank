@@ -7,7 +7,7 @@ module.exports = function (app, db) {
     app.post('/api/contact/contactdetail', function (req, res) {
         db.Branch.findOne({
             where: {
-                district: req.body.district
+                name: req.body.name
             }
         }).then(function (branch) {
             var bid = (branch["branchid"]);
