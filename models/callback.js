@@ -5,7 +5,10 @@ module.exports = function (sequelize, DataTypes) {
         mobile: DataTypes.INTEGER,
         email: DataTypes.STRING,
         mobile: DataTypes.BIGINT,
-        address: DataTypes.STRING
+        address: DataTypes.STRING,
+        unit: DataTypes.INTEGER,
+        amount: DataTypes.DECIMAL,
+        status: { type: DataTypes.STRING, defaultValue: "Open" }
     },
     {
         freezeTableName: true

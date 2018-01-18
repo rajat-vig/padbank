@@ -29,12 +29,16 @@ const Fn = db.sequelize.fn;
     });
     
     app.post('/api/callback/new', function (req, res) {
+        //var totalpads = utility.checkIfAmount(req.body.amount, req.body.unit);
         db.Callback.create({
             name: req.body.name,
             city: req.body.city,
             mobile: req.body.mobile,
             email: req.body.email,
             address: req.body.address,
+            unit: req.body.unit,
+            amount: req.body.amount,
+            status: req.body.status,
             userid: req.body.userid
         }).then(function (result) {
             if (result==0) 
@@ -42,14 +46,43 @@ const Fn = db.sequelize.fn;
             res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_ADDED, result));
         });
     });
-    
+
+    app.post('/api/callback/newamount', function (req, res) {
+        db.User.findOne({
+            where: {
+                userid: req.body.userid
+            }
+        }).then(function (result) {
+            var totalpads = utility.checkIfAmount(req.body.amount, req.body.unit);
+            var fullname = utility.getFullName(result["firstname"], result["lastname"]);
+            db.Callback.create({
+                name: fullname,
+                city: result["city"],
+                mobile: result["mobile"],
+                email: result["email"],
+                address: result["streetline1"],
+                unit: totalpads,
+                amount: req.body.amount,
+                status: req.body.status,
+                userid: req.body.userid
+            }).then(function (result1) {
+                if (result1==0) 
+                    return res.json(response.createResponseObject(constants.FALSE, constants.MISSING_DETAILS, result1)); 
+                res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_ADDED, result1));
+            });
+    });
+});
     app.put('/api/callback/update/:id', function (req, res) {
+        var totalpads = utility.checkIfAmount(req.body.amount, req.body.unit);
         db.Callback.update({
             name: req.body.name,
             city: req.body.city,
             mobile: req.body.mobile,
             email: req.body.email,
             address: req.body.address,
+            unit: totalpads,
+            amount: req.body.amount,
+            status: req.body.status,
             userid: req.body.userid
         }, 
         {

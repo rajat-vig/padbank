@@ -3,3 +3,8 @@ module.exports.checkIfAmount = function (amount, pads){
         return Math.trunc(amount/10);
     return pads;
 }
+
+module.exports.getFullName = function (firstname, lastname){
+        return (firstname+ " " + lastname)
+
+}
