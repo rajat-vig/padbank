@@ -3,6 +3,20 @@ var response = require('../../response');
 module.exports = function (app, db) {
 
 
+    app.get('/api/login/isreg/:id', function (req, res) {
+        db.Login.findAll({
+            attributes: [[db.sequelize.fn('DISTINCT', db.sequelize.col('isregistered')), 'isregistered']],
+            where: {
+                userid: req.params.id
+            }
+          }).then(function (result) {
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_BRANCHES, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.BRANCHES_FOUND, result));
+        });
+    });
+
+
     app.get('/api/login/logindetail/:id', function (req, res) {
         db.Login.findAll({
             where: {
@@ -49,7 +63,8 @@ module.exports = function (app, db) {
         db.Login.create({
             username: req.body.username,
             passwordhash: req.body.passwordhash,
-            activeuser: req.body.activeuser
+            activeuser: req.body.activeuser,
+            isregistered: req.body.isregistered
         }).then(function (result) {
             if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.BLANK_FIELDS, result)); 
@@ -61,7 +76,8 @@ module.exports = function (app, db) {
         db.Login.update({
             username: req.body.username,
             passwordhash: req.body.passwordhash,
-            activeuser: req.body.activeuser
+            activeuser: req.body.activeuser,
+            isregistered: req.body.isregistered
         }, 
         {
             where: {

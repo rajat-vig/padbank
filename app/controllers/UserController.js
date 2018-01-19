@@ -5,7 +5,7 @@ module.exports = function (app, db) {
 
 
     app.get('/api/user/detail/:userid', function (req, res) {
-        db.User.findOne({
+        db.User.findAll({
             where: {
                 userid: req.params.userid
             }
@@ -60,11 +60,20 @@ module.exports = function (app, db) {
             idvalue: req.body.idvalue,
             userid: req.body.userid
         }).then(function (result) {
-            if (result==0) 
+            db.Login.update({
+                isregistered: req.body.isregistered
+            }, 
+            {
+                where: {
+                    userid: req.body.userid
+                }
+            }).then(function (result1){
+                if (result==0) 
                 return res.json(response.createResponseObject(constants.FALSE, constants.MISSING_DETAILS, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_ADDED, result));
         });
-    });
+    });            
+});
     
     app.put('/api/user/update/:id', function (req, res) {
         db.User.update({

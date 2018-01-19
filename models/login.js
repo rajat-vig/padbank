@@ -3,7 +3,8 @@ module.exports = function (sequelize, DataTypes) {
         userid: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
         username: DataTypes.STRING,
         passwordhash: DataTypes.STRING,
-        activeuser: DataTypes.BOOLEAN       
+        activeuser: DataTypes.BOOLEAN,
+        isregistered: { type: DataTypes.BOOLEAN, defaultValue: false }       
     },
     {
         freezeTableName: true
