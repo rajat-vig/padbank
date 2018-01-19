@@ -4,10 +4,10 @@ module.exports = function (app, db) {
     // CRUD
 
 
-    app.get('/api/user/find/:id', function (req, res) {
+    app.get('/api/user/detail/:userid', function (req, res) {
         db.User.findOne({
             where: {
-                userid: req.params.id
+                userid: req.params.userid
             }
         }).then(function (result) {
             if (result==0) 
