@@ -4,6 +4,21 @@ module.exports = function (app, db) {
     // CRUD
 
 
+    app.get('/api/user/find/:id', function (req, res) {
+        db.User.findOne({
+            where: {
+                userid: req.params.id
+            }
+        }).then(function (result) {
+            if (result==0) 
+                return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAIL, result)); 
+            res.json(response.createResponseObject(constants.TRUE, constants.USER_DETAIL, result));
+        });
+    });
+
+
+
+
     app.get('/api/user/userdetail/:id', function (req, res) {
         db.User.findAll({
             where: {
@@ -15,17 +30,6 @@ module.exports = function (app, db) {
         });
     });
 
-    app.get('/api/user/detail/:id', function (req, res) {
-        db.User.findOne({
-            where: {
-                userid: req.params.id
-            }
-        }).then(function (result) {
-            if (result==0) 
-                return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAIL, result)); 
-            res.json(response.createResponseObject(constants.TRUE, constants.USER_DETAIL, result));
-        });
-    });
     
     app.get('/api/user/all', function (req, res) {
         db.User.findAll({}).then(function (result) {
