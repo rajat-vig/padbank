@@ -48,19 +48,19 @@ const Fn = db.sequelize.fn;
     });
 
     app.post('/api/callback/newamount', function (req, res) {
-        db.User.findOne({
+        db.User.findAll({
             where: {
                 userid: req.body.userid
             }
         }).then(function (result) {
             var totalpads = utility.checkIfAmount(req.body.amount, req.body.unit);
-            var fullname = utility.getFullName(result["firstname"], result["lastname"]);
+            var fullname = utility.getFullName(result[0]["firstname"], result[0]["lastname"]);
             db.Callback.create({
                 name: fullname,
-                city: result["city"],
-                mobile: result["mobile"],
-                email: result["email"],
-                address: result["streetline1"],
+                city: result[0]["city"],
+                mobile: result[0]["mobile"],
+                email: result[0]["email"],
+                address: result[0]["streetline1"],
                 unit: totalpads,
                 amount: req.body.amount,
                 status: req.body.status,

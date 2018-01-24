@@ -111,6 +111,50 @@ module.exports = function (app, db) {
                 return res.json(response.createResponseObject(constants.FALSE, constants.BRANCH_NOT_DELETED, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.BRANCH_DELETED, result));
         });
-    })
+    });
+
+    app.post('/api/branch/vregistration', function (req, res) {
+        db.Branch.findOne({
+            where: {
+                name: req.body.name
+            }
+        }).then(function (branch) {
+            var bid = (branch["branchid"]);
+            db.Account.create({
+                userid: req.body.userid,
+                branchid: bid,
+                roleid: 2
+            });
+            
+            db.User.update({
+                firstname: req.body.firstname,
+                middlename: req.body.middlename,
+                lastname: req.body.lastname,
+                email: req.body.email,
+                mobile: req.body.mobile,
+                gender: req.body.gender,
+                country: req.body.country,
+                state: req.body.state,
+                district: req.body.district,
+                city: req.body.city,
+                village: req.body.village,
+                streetline1: req.body.streetline1,
+                streetline2: req.body.streetline2,
+                pincode: req.body.pincode,
+                dob: req.body.dob,
+                gitype: req.body.gitype,
+                idvalue: req.body.idvalue
+            }, 
+            {
+                where: {
+                    userid: req.body.userid
+                }
+            }).then(function (result) {
+                if (result==0) 
+                    return res.json(response.createResponseObject(constants.FALSE, constants.BLANK_FIELDS, result)); 
+                res.json(response.createResponseObject(constants.TRUE, constants.USER_CREATED, result));
+            });
+        });
+    });
     
 }

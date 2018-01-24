@@ -1,5 +1,6 @@
 var constants = require('../../constants');
 var response = require('../../response');
+var utility = require('../../utilities');
 module.exports = function (app, db) {
     // CRUD
 
@@ -117,6 +118,72 @@ module.exports = function (app, db) {
                 return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAILS_DELETE, result)); 
             res.json(response.createResponseObject(constants.TRUE, constants.DETAILS_DELETED, result));
         });
-    })
-    
+    });
+
+
+
+
+    app.get('/api/user/myaccount/:userid', function (req, res) {
+        db.User.findAll({
+            where: {
+                userid: req.params.userid
+            }
+        }).then(function (user) {
+            var fullname = utility.getFullName(user[0]["firstname"], user[0]["lastname"]);
+            var contributorsince = (user[0]["createdAt"]).toISOString().slice(0, 19).replace('T', ' ');
+            db.Account.findAll({
+                attributes: ['roleid'],
+                where: {
+                    userid: req.params.userid
+                }
+            }).then(function (account) {
+                db.Roles.findAll({
+                    attributes: ['roletype'],
+                    where: {
+                        roleid: account[0]["roleid"]
+                    }    
+                }).then(function (roles) {
+                    var roletype = roles[0]["roletype"];
+                    if(roletype=="D"){
+                        db.Inventory.findAll({
+                            where: {
+                                userid: req.params.userid,
+                            }
+                        }).then(function (inventory) {
+                            db.Transactions.findAll({
+                                where: {
+                                    inventoryid: inventory[0]["inventoryid"],
+                                    transactiontype: {in: ["D-OUT", "R-IN"]}
+                                }    
+                            }).then(function (transactions) {
+                                var totaldonation = transactions[0]["unitcount"];
+                                var totaldistributed = transactions[1]["unitcount"];
+                                var result = {name: fullname, contributorsince: contributorsince, role: roletype, totaldonation: totaldonation, totaldistributed: totaldistributed, balance: totaldonation-totaldistributed};
+                                if (result==0) 
+                                    return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAIL, result)); 
+                                res.json(response.createResponseObject(constants.TRUE, constants.USER_DETAIL, result));            
+                            });
+                        });
+                            
+                        }
+                        else if(roletype=="V"){
+                            db.Transactions.findAll({
+                                where: {
+                                    userid: req.params.userid,
+                                    transactiontype: {in: ["V-IN", "V-OUT"]}
+                                }    
+                            }).then(function (transactions) {
+                                var totalcollected = transactions[0]["unitcount"];
+                                var totaldistributed = transactions[1]["unitcount"];
+                                var result = {name: fullname, contributorsince: contributorsince, role: roletype, totalcollected: totalcollected, totaldistributed: totaldistributed, balance: totalcollected-totaldistributed};
+                                if (result==0) 
+                                    return res.json(response.createResponseObject(constants.FALSE, constants.NO_DETAIL, result)); 
+                                res.json(response.createResponseObject(constants.TRUE, constants.USER_DETAIL, result));            
+                            });
+                        }
+                    });   
+                });
+            });
+        });
+   
 }
